@@ -1,0 +1,20 @@
+# 密鑰與本機設定
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+
+# 資料與執行期
+*.sqlite3
+*.sqlite3-*
+data/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
