@@ -10,7 +10,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app import collector, db
 from app.config import settings
@@ -23,6 +23,8 @@ app = FastAPI(
     title=settings.service_name,
     version="0.1.0",
     description="PrismQuant A1 新聞智能體：抓取 RSS 新聞、去重，並用大模型產生摘要、情緒與主題標籤。",
+    docs_url=None,
+    redoc_url=None,
 )
 
 if settings.cors_origins:
@@ -37,6 +39,12 @@ if settings.cors_origins:
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def index():
     return DEMO_PAGE
+
+
+@app.get("/docs", include_in_schema=False)
+@app.get("/redoc", include_in_schema=False)
+def _redirect_docs():
+    return RedirectResponse(url="/")
 
 
 @app.get("/health")
