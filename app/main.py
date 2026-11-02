@@ -6,11 +6,16 @@
     GET  /api/v1/news/events?limit=60
     POST /api/v1/news/collect?limit=10
 """
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 
 from app import collector, db
 from app.config import settings
+
+DEMO_PAGE = (Path(__file__).parent / "demo.html").read_text(encoding="utf-8")
 
 db.init_db()
 
@@ -27,6 +32,11 @@ if settings.cors_origins:
         allow_methods=["GET", "POST"],
         allow_headers=["*"],
     )
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def index():
+    return DEMO_PAGE
 
 
 @app.get("/health")
